@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toilet Roll Cost Calculator</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #000;
+    color: #fff;
+    margin: 20px;
+}
+h1, h2 { color: #fff; }
+section {
+    background: #111;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border-left: 8px solid transparent;
+}
+label { display: block; margin: 8px 0 2px; }
+input {
+    font-weight: bold;
+    padding: 5px;
+    width: 100%;
+    max-width: 200px;
+    color: #000;
+    background: #fff;
+    border-radius: 3px;
+}
+.output { font-weight: bold; margin-top: 10px; display: block; }
+#rawMaterial { border-color: #3498db; }
+#packaging { border-color: #2ecc71; }
+#production { border-color: #f1c40f; }
+#overheads { border-color: #e67e22; }
+#localTransport { border-color: #9b59b6; }
+#exportFreight { border-color: #e74c3c; }
+#rawMaterial .output { color:#3498db; }
+#packaging .output { color:#2ecc71; }
+#production .output { color:#f1c40f; }
+#overheads .output { color:#e67e22; }
+#localTransport .output { color:#9b59b6; }
+#exportFreight .output { color:#e74c3c; }
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th, td { padding: 8px; text-align: left; color:#fff; }
+th { text-align: right; }
+td.value { text-align: right; }
+</style>
+</head>
+<body>
+<h1>Toilet Roll Cost Calculator</h1>
+
+<section>
+<h2>🌍 Global Settings</h2>
+<label>Exchange Rate (PKR → USD)</label>
+<input type="text" id="exchangeRate" value="280">
+</section>
+
+<section>
+<h2>📄 Paper Specification</h2>
+<label>Ply</label>
+<input type="number" id="ply" value="2">
+<label>GSM (per ply)</label>
+<input type="number" id="gsm" value="15">
+<label>Sheets per Roll</label>
+<input type="number" id="sheets" value="500">
+<label>Sheet Width (cm)</label>
+<input type="number" id="sheetWidth" value="10">
+<label>Sheet Length (cm)</label>
+<input type="number" id="sheetLength" value="10">
+<span class="output">Tissue Weight (grams): <span id="tissueWeight">0.000</span></span>
+</section>
+
+<section id="rawMaterial">
+<h2>💰 Raw Material Cost</h2>
+<label>Tissue Cost per Ton (USD)</label>
+<input type="text" id="tissueCostTon" value="1100">
+<label>Core Paper Cost per Ton (USD)</label>
+<input type="text" id="coreCostTon" value="635">
+<label>Core Weight per Roll (grams)</label>
+<input type="text" id="coreWeight" value="4.0">
+<label>Wastage (%)</label>
+<input type="number" id="wastage" value="3">
+<span class="output">Tissue Cost/Roll: $<span id="tissueCostRoll">0.000</span></span>
+<span class="output">Core Cost/Roll: $<span id="coreCostRoll">0.000</span></span>
+<span class="output">Total Raw Material Cost/Roll: $<span id="totalRawMaterial">0.000</span></span>
+</section>
+
+<section id="packaging">
+<h2>📦 Packaging (PKR → USD)</h2>
+<label>Single Roll Wrap (PKR)</label>
+<input type="text" id="singleWrap" value="1.2">
+<label>Bundle Wrap (PKR)</label>
+<input type="text" id="bundleWrap" value="20">
+<label>Rolls per Bundle</label>
+<input type="number" id="rollsPerBundle" value="10">
+<span class="output">Packaging Cost/Roll: $<span id="packagingCost">0.000</span></span>
+</section>
+
+<section id="production">
+<h2>⚡ Production & Electricity</h2>
+<label>Total Connected Load (kW)</label>
+<input type="text" id="load" value="100">
+<label>Average Usage (%)</label>
+<input type="number" id="usage" value="65">
+<label>Unit Rate (PKR/unit)</label>
+<input type="text" id="unitRate" value="70">
+<label>Rolls per Hour</label>
+<input type="number" id="rollsPerHour" value="600">
+<label>Working Hours/Shift</label>
+<input type="number" id="hours" value="8">
+<label>Shifts/Day</label>
+<input type="number" id="shifts" value="1">
+<label>Working Days/Month</label>
+<input type="number" id="days" value="26">
+<span class="output">Electricity Units/Month: <span id="elecUnits">0.000</span></span>
+<span class="output">Electricity Cost/Month: $<span id="elecCostMonth">0.000</span></span>
+<span class="output">Monthly Production (Rolls): <span id="monthlyProduction">0.000</span></span>
+<span class="output">Electricity Cost/Roll: $<span id="elecCostRoll">0.000</span></span>
+</section>
+
+<section id="overheads">
+<h2>🏢 Overheads</h2>
+<label>Rent (PKR/month)</label>
+<input type="text" id="rent" value="450000">
+<label>Labor (PKR/month)</label>
+<input type="text" id="labor" value="250000">
+<label>Misc (PKR/month)</label>
+<input type="text" id="misc" value="20000">
+<span class="output">Total Overheads (USD): <span id="overheadsUSD">0.000</span></span>
+<span class="output">Overhead Cost/Roll: $<span id="overheadPerRoll">0.000</span></span>
+</section>
+
+<section id="localTransport">
+<h2>🚚 Local Transport & Handling</h2>
+<label>Local Transport per Container (PKR)</label>
+<input type="text" id="localTransportPKR" value="140000">
+<label>Clearing / Local Charges (USD)</label>
+<input type="text" id="clearingUSD" value="150">
+<label>Rolls per Container</label>
+<input type="number" id="rollsPerContainerLocal" value="60340">
+<span class="output">Transport & Handling Cost/Roll: $<span id="localTransportCost">0.000</span></span>
+</section>
+
+<section id="exportFreight">
+<h2>🌊 Export Freight</h2>
+<label>Ocean Freight (USD)</label>
+<input type="text" id="oceanFreight" value="2000">
+<label>Rolls per Container</label>
+<input type="number" id="rollsPerContainerExport" value="60340">
+<span class="output">Freight per Roll: $<span id="freightPerRoll">0.000</span></span>
+</section>
+
+<section>
+<h2>💲 Final Cost Summary</h2>
+<span class="output">Cost per Roll (USD): $<span id="costPerRoll">0.000</span></span>
+<span class="output">Cost per Ton (USD): $<span id="costPerTon">0.000</span></span>
+<table>
+<tr><td style="color:#3498db">Raw Material</td><td class="value" id="breakRaw">0.000</td><td class="value" id="breakRawPct">0.00%</td></tr>
+<tr><td style="color:#2ecc71">Packaging</td><td class="value" id="breakPackaging">0.000</td><td class="value" id="breakPackagingPct">0.00%</td></tr>
+<tr><td style="color:#f1c40f">Electricity</td><td class="value" id="breakElec">0.000</td><td class="value" id="breakElecPct">0.00%</td></tr>
+<tr><td style="color:#e67e22">Overheads</td><td class="value" id="breakOverhead">0.000</td><td class="value" id="breakOverheadPct">0.00%</td></tr>
+<tr><td style="color:#9b59b6">Local Transport & Handling</td><td class="value" id="breakLocal">0.000</td><td class="value" id="breakLocalPct">0.00%</td></tr>
+<tr><td style="color:#e74c3c">Export Freight</td><td class="value" id="breakFreight">0.000</td><td class="value" id="breakFreightPct">0.00%</td></tr>
+</table>
+</section>
+
+<script>
+function formatNumber(num){
+    return Number(num).toLocaleString(undefined,{minimumFractionDigits:3, maximumFractionDigits:3});
+}
+
+function calculate(){
+    const parseInput = id=>parseFloat(document.getElementById(id).value.replace(/,/g,''))||0;
+    const exRate = parseInput('exchangeRate');
+
+    // Paper
+    const ply=parseInput('ply'), gsm=parseInput('gsm'), sheets=parseInput('sheets'), w=parseInput('sheetWidth'), l=parseInput('sheetLength');
+    const tissueWeight=ply*gsm*sheets*(w*l)/(100*100);
+    document.getElementById('tissueWeight').textContent=formatNumber(tissueWeight);
+
+    // Raw Material
+    const tissueCostTon=parseInput('tissueCostTon'), coreCostTon=parseInput('coreCostTon'), coreWeight=parseInput('coreWeight'), wastage=parseInput('wastage')/100;
+    const tissueCostRoll=tissueWeight/1000000*tissueCostTon*(1+wastage);
+    const coreCostRoll=coreWeight/1000000*coreCostTon;
+    const totalRaw=tissueCostRoll+coreCostRoll;
+    document.getElementById('tissueCostRoll').textContent=formatNumber(tissueCostRoll);
+    document.getElementById('coreCostRoll').textContent=formatNumber(coreCostRoll);
+    document.getElementById('totalRawMaterial').textContent=formatNumber(totalRaw);
+
+    // Packaging
+    const singleWrap=parseInput('singleWrap'), bundleWrap=parseInput('bundleWrap'), rollsPerBundle=parseInput('rollsPerBundle');
+    const packagingRoll=(singleWrap+bundleWrap/rollsPerBundle)/exRate;
+    document.getElementById('packagingCost').textContent=formatNumber(packagingRoll);
+
+    // Production
+    const load=parseInput('load'), usage=parseInput('usage')/100, unitRate=parseInput('unitRate');
+    const rollsPerHour=parseInput('rollsPerHour'), hours=parseInput('hours'), shifts=parseInput('shifts'), days=parseInput('days');
+    const elecUnits=load*usage*hours*shifts*days;
+    const elecCostMonth=elecUnits*unitRate/exRate;
+    const monthlyProduction=rollsPerHour*hours*shifts*days;
+    const elecPerRoll=elecCostMonth/monthlyProduction;
+    document.getElementById('elecUnits').textContent=formatNumber(elecUnits);
+    document.getElementById('elecCostMonth').textContent=formatNumber(elecCostMonth);
+    document.getElementById('monthlyProduction').textContent=formatNumber(monthlyProduction);
+    document.getElementById('elecCostRoll').textContent=formatNumber(elecPerRoll);
+
+    // Overheads
+    const rent=parseInput('rent'), labor=parseInput('labor'), misc=parseInput('misc');
+    const overheadUSD=(rent+labor+misc)/exRate;
+    const overheadPerRoll=overheadUSD/monthlyProduction;
+    document.getElementById('overheadsUSD').textContent=formatNumber(overheadUSD);
+    document.getElementById('overheadPerRoll').textContent=formatNumber(overheadPerRoll);
+
+    // Local Transport & Handling
+    const localPKR=parseInput('localTransportPKR'), clearing=parseInput('clearingUSD'), rollsContainer=parseInput('rollsPerContainerLocal');
+    const localTransportCost=(localPKR/exRate+clearing)/rollsContainer;
+    document.getElementById('localTransportCost').textContent=formatNumber(localTransportCost);
+
+    // Export Freight
+    const oceanFreight=parseInput('oceanFreight'), rollsContainerExport=parseInput('rollsPerContainerExport');
+    const freightPerRoll=oceanFreight/rollsContainerExport;
+    document.getElementById('freightPerRoll').textContent=formatNumber(freightPerRoll);
+
+    // Final Cost
+    const finalRoll=totalRaw+packagingRoll+elecPerRoll+overheadPerRoll+localTransportCost+freightPerRoll;
+    const finalTon=finalRoll*1000000/tissueWeight;
+    document.getElementById('costPerRoll').textContent=formatNumber(finalRoll);
+    document.getElementById('costPerTon').textContent=formatNumber(finalTon);
+
+    // Itemized breakdown with %
+    const items=[totalRaw, packagingRoll, elecPerRoll, overheadPerRoll, localTransportCost, freightPerRoll];
+    const ids=['breakRaw','breakPackaging','breakElec','breakOverhead','breakLocal','breakFreight'];
+    const pctIds=['breakRawPct','breakPackagingPct','breakElecPct','breakOverheadPct','breakLocalPct','breakFreightPct'];
+
+    items.forEach((val,i)=>{
+        document.getElementById(ids[i]).textContent=formatNumber(val);
+        const pct=(val/finalRoll*100);
+        document.getElementById(pctIds[i]).textContent=pct.toFixed(2)+'%';
+    });
+}
+
+document.querySelectorAll('input').forEach(input=>input.addEventListener('input',calculate));
+calculate();
+</script>
+</body>
+</html>
