@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧾 Toilet Roll Cost Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #17a2b8;
+            --light: #f8f9fa;
+            --dark: #343a40;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a2530 100%);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--success), var(--info), var(--warning));
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-text h1 {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-text p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .global-settings {
+            background: rgba(255,255,255,0.1);
+            padding: 15px 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .global-settings h3 {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .exchange-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .exchange-input input {
+            padding: 10px 15px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            width: 150px;
+            text-align: center;
+        }
+
+        .exchange-input input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .exchange-input input:focus {
+            outline: none;
+            border-color: white;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .exchange-input span {
+            font-weight: 600;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .calculator-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-top: 4px solid var(--secondary);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calculator-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+
+        .calculator-section::before {
+            content: attr(data-section);
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--secondary);
+            color: white;
+            padding: 5px 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 0 0 0 8px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--secondary), #2980b9);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .section-header h2 {
+            color: var(--primary);
+            font-size: 1.4rem;
+            flex: 1;
+        }
+
+        .section-header .section-number {
+            background: var(--primary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .currency-badge {
+            background: #e9ecef;
+            color: #495057;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .currency-badge.usd {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .currency-badge.pkr {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: var(--secondary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .output-display {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+            border: 2px solid #dee2e6;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .output-value {
+            color: var(--success);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .hint {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 8px;
+            font-style: italic;
+            padding-left: 5px;
+            border-left: 3px solid #dee2e6;
+        }
+
+        .results-section {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, var(--primary) 0%, #2c3e50 100%);
+            color: white;
+            border-top: 4px solid var(--success);
+        }
+
+        .results-section .section-header h2 {
+            color: white;
+        }
+
+        .final-costs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .cost-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .cost-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .cost-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .cost-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .cost-subtitle {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .cost-breakdown {
+            grid-column: 1 / -1;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .breakdown-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .breakdown-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .breakdown-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .breakdown-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .breakdown-value {
+            font-weight: 600;
+            color: white;
+        }
+
+        .breakdown-percentage {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        .breakdown-total {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+            min-width: 160px;
+        }
+
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(41, 128, 185, 0.3);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #219653;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #d68910;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.3);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: #6c757d;
+            font-size: 0.9rem;
+            border-top: 1px solid #dee2e6;
+            margin-top: 30px;
+            background: white;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .header-text h1 {
+                justify-content: center;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .calculator-section {
+                padding: 20px;
+            }
+            
+            .input-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .final-costs {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.error {
+            background: var(--danger);
+        }
+
+        .toast.info {
+            background: var(--info);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="header-text">
+                    <h1><i class="fas fa-calculator"></i> 🧾 Toilet Roll Cost Calculator</h1>
+                    <p>Business Logic Compliant - No Currency Mismatch Risk</p>
+                </div>
+                
+                <div class="global-settings">
+                    <h3><i class="fas fa-globe-asia"></i> Global Exchange Rate</h3>
+                    <div class="exchange-input">
+                        <span>1 USD =</span>
+                        <input type="number" id="exchangeRate" value="280.5" step="0.1" min="100" max="500">
+                        <span>PKR</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <!-- Section 1: Product Specification -->
+            <section class="calculator-section" data-section="PHYSICAL SPECS">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-ruler-combined"></i>
+                    </div>
+                    <h2>1️⃣ Product Specification</h2>
+                    <div class="section-number">1</div>
+                </div>
+                
+                <p class="hint">Defines physical roll properties only. No cost calculations here.</p>
+                
+                <div class="input-row">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Number of Ply</label>
+                        <input type="number" id="ply" min="1" max="4" step="1" value="2">
+                    </div>
+                    
+                    <div class="input-group" style="flex: 1;">
+                        <label>GSM per Ply <span class="unit">(g/m²)</span></label>
+                        <input type="number" id="gsmPerPly" min="10" max="30" step="0.5" value="18">
+                    </div>
+                </div>
+                
+                <div class="input-row">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Sheets per Roll</label>
+                        <input type="number" id="sheetsPerRoll" min="50" max="500" step="1" value="200">
+                    </div>
+                    
+                    <div class="input-group" style="flex: 1;">
+                        <label>Sheet Width <span class="unit">(cm)</span></label>
+                        <input type="number" id="sheetWidth" min="5" max="30" step="0.1" value="10.5">
+                    </div>
+                    
+                    <div class="input-group" style="flex: 1;">
+                        <label>Sheet Length <span class="unit">(cm)</span></label>
+                        <input type="number" id="sheetLength" min="5" max="30" step="0.1" value="11.5">
+                    </div>
+                </div>
+                
+                <div class="output-display">
+                    <span>Total Paper Weight per Roll:</span>
+                    <span id="totalPaperWeight" class="output-value">45.2 g</span>
+                </div>
+            </section>
+            
+            <!-- Section 2: Raw Material Costing -->
+            <section class="calculator-section" data-section="RAW MATERIALS">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                    <h2>2️⃣ Raw Material Costing</h2>
+                    <div class="section-number">2</div>
+                </div>
+                
+                <div class="input-row">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Jumbo Roll Price <span class="currency-badge usd">USD/ton</span></label>
+                        <input type="number" id="jumboPrice" min="500" max="2000" step="10" value="850">
+                    </div>
+                    
+                    <div class="input-group" style="flex: 1;">
+                        <label>Core Paper Price <span class="currency-badge usd">USD/ton</span></label>
+                        <input type="number" id="corePrice" min="200" max="1500" step="10" value="550">
+                    </div>
+                </div>
+                
+                <div class="input-row">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Core Weight per Roll <span class="unit">(grams)</span></label>
+                        <input type="number" id="coreWeight" min="10" max="100" step="1" value="45">
+                    </div>
+                    
+                    <div class="input-group" style="flex: 1;">
+                        <label>Waste Percentage <span class="unit">(%)</span></label>
+                        <input type="number" id="wastePercentage" min="0" max="20" step="0.1" value="3.5">
+                    </div>
+                </div>
+                
+                <div class="output-display">
+                    <span>Paper Cost per Roll:</span>
+                    <span id="paperCostPerRoll" class="output-value">$0.038</span>
+                </div>
+                
+                <div class="output-display">
+                    <span>Core Cost per Roll:</span>
+                    <span id="coreCostPerRoll" class="output-value">$0.025</span>
+                </div>
+                
+                <div class="output-display" style="background: #e8f5e8; border-color: #27ae60;">
+                    <span><strong>Total Raw Material Cost per Roll:</strong></span>
+                    <span id="totalRawMaterialCost" class="output-value" style="color: #27ae60;">$0.063</span>
+                </div>
+            </section>
+            
+            <!-- Section 3: Packaging -->
+            <section class="calculator-section" data-section="PACKAGING">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <h2>3️⃣ Packaging</h2>
+                    <div class="section-number">3</div>
+                </div>
+                
+                <p class="hint">All PKR inputs converted to USD using global exchange rate</p>
+                
+                <div class="input-row">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Inner Wrap per Roll <span class="currency-badge pkr">PKR</span></label>
+                        <input type="number" id="innerWrapCost" min="0.5" max="20" step="0.5" value="5">
+                    </div>
+                    
+                    <div class="input-group" style="flex: 1;">
+                        <label>Outer/Bundle Packaging <span class="currency-badge pkr">PKR</span></label>
+                        <input type="number" id="bundlePackagingCost" min="5" max="100" step="1" value="30">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Rolls per Bundle</label>
+                    <input type="number" id="rollsPerBundle" min="1" max="24" step="1" value="6">
+                </div>
+                
+                <div class="output-display" style="background: #e8f5e8; border-color: #27ae60;">
+                    <span><strong>Total Packaging Cost per Roll (USD):</strong></span>
+                    <span id="packagingCostPerRoll" class="output-value" style="color: #27ae60;">$0.092</span>
+                </div>
+            </section>
+            
+            <!-- Section 4: Production & Electricity -->
+            <section class="calculator-section" data-section="PRODUCTION">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-industry"></i>
+                    </div>
+                    <h2>4️⃣ Production & Electricity</h2>
+                    <div class="section-number">4</div>
+                </div>
+                
+                <p class="hint">Key driver: Defines production volume and electricity consumption</p>
+                
+                <div class="input-row">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Connected Electrical Load <span class="unit">(kW)</span></label>
+                        <input type="number" id="connectedLoad" min="10" max="500" step="10" value="150">
+                    </div>
+                    
+                    <div class="input-group" style="flex: 1;">
+                        <label>Average Usage <span class="unit">(%)</span></label>
+                        <input type="number" id="avgUsage" min="10" max="100" step="5" value="65">
+                    </div>
+                </div>
+                
+                <div class="input-row">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Electricity Rate <span class="currency-badge pkr">PKR/unit</span></label>
+                        <input type="number" id="electricityRate" min="10" max="50" step="0.5" value="22.5">
+                    </div>
+                    
+                    <div class="input-group" style="flex: 1;">
+                        <label>Machine Speed <span class="unit">(rolls/hour)</span></label>
+                        <input type="number" id="machineSpeed" min="100" max="10000" step="100" value="2500">
+                    </div>
+                </div>
+                
+                <div class="input-row">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Working Hours per Shift</label>
+                        <input type="number" id="hoursPerShift" min="1" max="24" step="0.5" value="8">
+                    </div>
+                    
+                    <div class="input-group" style="flex: 1;">
+                        <label>Shifts per Day</label>
+                        <input type="number" id="shiftsPerDay" min="1" max="3" step="1" value="2">
+                    </div>
+                    
+                    <div class="input-group" style="flex: 1;">
+                        <label>Working Days per Month</label>
+                        <input type="number" id="daysPerMonth" min="15" max="31" step="1" value="26">
+                    </div>
+                </div>
+                
+                <div class="output-display">
+                    <span>Monthly Production Volume:</span>
+                    <span id="monthlyProduction" class="output-value">1,040,000 rolls</span>
+                </div>
+                
+                <div class="output-display">
+                    <span>Monthly Electricity Cost (USD):</span>
+                    <span id="monthlyElectricityCost" class="output-value">$4,164</span>
+                </div>
+                
+                <div class="output-display" style="background: #e8f5e8; border-color: #27ae60;">
+                    <span><strong>Electricity Cost per Roll (USD):</strong></span>
+                    <span id="electricityCostPerRoll" class="output-value" style="color: #27ae60;">$0.004</span>
+                </div>
+            </section>
+            
+            <!-- Section 5: Overheads -->
+            <section class="calculator-section" data-section="OVERHEADS">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h2>5️⃣ Overheads</h2>
+                    <div class="section-number">5</div>
+                </div>
+                
+                <p class="hint">Fixed monthly costs converted to USD using global exchange rate</p>
+                
+                <div class="input-row">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Rent per Month <span class="currency-badge pkr">PKR</span></label>
+                        <input type="number" id="rent" min="50000" max="500000" step="5000" value="150000">
+                    </div>
+                    
+                    <div class="input-group" style="flex: 1;">
+                        <label>Labor per Month <span class="currency-badge pkr">PKR</span></label>
+                        <input type="number" id="labor" min="100000" max="2000000" step="10000" value="750000">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Admin/Misc per Month <span class="currency-badge pkr">PKR</span></label>
+                    <input type="number" id="misc" min="0" max="500000" step="5000" value="120000">
+                </div>
+                
+                <div class="output-display">
+                    <span>Total Overheads (USD/month):</span>
+                    <span id="totalOverheadsUSD" class="output-value">$3,636</span>
+                </div>
+                
+                <div class="output-display" style="background: #e8f5e8; border-color: #27ae60;">
+                    <span><strong>Overhead Cost per Roll (USD):</strong></span>
+                    <span id="overheadCostPerRoll" class="output-value" style="color: #27ae60;">$0.0035</span>
+                </div>
+            </section>
+            
+            <!-- Section 6: Local Transport & Handling -->
+            <section class="calculator-section" data-section="TRANSPORT">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h2>6️⃣ Local Transport & Handling</h2>
+                    <div class="section-number">6</div>
+                </div>
+                
+                <div class="input-row">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Local Transport per Container <span class="currency-badge pkr">PKR</span></label>
+                        <input type="number" id="localTransport" min="5000" max="50000" step="500" value="15000">
+                    </div>
+                    
+                    <div class="input-group" style="flex: 1;">
+                        <label>Clearing/Local Charges <span class="currency-badge usd">USD</span></label>
+                        <input type="number" id="clearingCharges" min="100" max="5000" step="50" value="850">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Rolls per Container</label>
+                    <input type="number" id="rollsPerContainer" min="1000" max="100000" step="1000" value="45000">
+                </div>
+                
+                <div class="output-display" style="background: #e8f5e8; border-color: #27ae60;">
+                    <span><strong>Local Transport & Handling Cost per Roll (USD):</strong></span>
+                    <span id="transportCostPerRoll" class="output-value" style="color: #27ae60;">$0.021</span>
+                </div>
+            </section>
+            
+            <!-- Section 7: Export Freight -->
+            <section class="calculator-section" data-section="FREIGHT">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-ship"></i>
+                    </div>
+                    <h2>7️⃣ Export Freight</h2>
+                    <div class="section-number">7</div>
+                </div>
+                
+                <p class="hint">Fully separated from local transport</p>
+                
+                <div class="input-row">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Freight Cost per Container <span class="currency-badge usd">USD</span></label>
+                        <input type="number" id="freightCost" min="1000" max="10000" step="100" value="3200">
+                    </div>
+                    
+                    <div class="input-group" style="flex: 1;">
+                        <label>Rolls per Container</label>
+                        <input type="number" id="freightRollsPerContainer" min="1000" max="100000" step="1000" value="45000">
+                    </div>
+                </div>
+                
+                <div class="output-display" style="background: #e8f5e8; border-color: #27ae60;">
+                    <span><strong>Freight Cost per Roll (USD):</strong></span>
+                    <span id="freightCostPerRoll" class="output-value" style="color: #27ae60;">$0.071</span>
+                </div>
+            </section>
+            
+            <!-- Section 8: Final Cost Summary -->
+            <section class="calculator-section results-section" data-section="RESULTS">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h2>8️⃣ Final Cost Summary</h2>
+                    <div class="section-number">8</div>
+                </div>
+                
+                <p class="hint" style="color: rgba(255,255,255,0.8);">All costs normalized to per-roll USD. No cost counted twice.</p>
+                
+                <div class="final-costs">
+                    <div class="cost-card">
+                        <h3><i class="fas fa-roll"></i> Cost per Roll</h3>
+                        <div id="costPerRoll" class="cost-value">$0.244</div>
+                        <div class="cost-subtitle">Complete manufacturing + logistics cost</div>
+                    </div>
+                    
+                    <div class="cost-card">
+                        <h3><i class="fas fa-boxes"></i> Cost per 100 Rolls</h3>
+                        <div id="costPer100Rolls" class="cost-value">$24.40</div>
+                        <div class="cost-subtitle">For wholesale pricing</div>
+                    </div>
+                    
+                    <div class="cost-card">
+                        <h3><i class="fas fa-pallet"></i> Cost per 1,000 Rolls</h3>
+                        <div id="costPer1000Rolls" class="cost-value">$244.00</div>
+                        <div class="cost-subtitle">For bulk orders</div>
+                    </div>
+                </div>
+                
+                <div class="cost-breakdown">
+                    <div class="breakdown-header">
+                        <h3><i class="fas fa-chart-pie"></i> Cost Breakdown (per roll)</h3>
+                        <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">All amounts in USD</div>
+                    </div>
+                    
+                    <div class="breakdown-list">
+                        <div class="breakdown-item">
+                            <div class="breakdown-name">
+                                <i class="fas fa-box-open" style="color: #3498db;"></i>
+                                Raw Materials
+                            </div>
+                            <div class="breakdown-value" id="breakdownRawMaterials">$0.063</div>
+                            <div class="breakdown-percentage" id="breakdownRawMaterialsPct">25.8%</div>
+                        </div>
+                        
+                        <div class="breakdown-item">
+                            <div class="breakdown-name">
+                                <i class="fas fa-box" style="color: #9b59b6;"></i>
+                                Packaging
+                            </div>
+                            <div class="breakdown-value" id="breakdownPackaging">$0.092</div>
+                            <div class="breakdown-percentage" id="breakdownPackagingPct">37.7%</div>
+                        </div>
+                        
+                        <div class="breakdown-item">
+                            <div class="breakdown-name">
+                                <i class="fas fa-bolt" style="color: #f39c12;"></i>
+                                Electricity
+                            </div>
+                            <div class="breakdown-value" id="breakdownElectricity">$0.004</div>
+                            <div class="breakdown-percentage" id="breakdownElectricityPct">1.6%</div>
+                        </div>
+                        
+                        <div class="breakdown-item">
+                            <div class="breakdown-name">
+                                <i class="fas fa-building" style="color: #e74c3c;"></i>
+                                Overheads
+                            </div>
+                            <div class="breakdown-value" id="breakdownOverheads">$0.0035</div>
+                            <div class="breakdown-percentage" id="breakdownOverheadsPct">1.4%</div>
+                        </div>
+                        
+                        <div class="breakdown-item">
+                            <div class="breakdown-name">
+                                <i class="fas fa-truck" style="color: #1abc9c;"></i>
+                                Local Transport
+                            </div>
+                            <div class="breakdown-value" id="breakdownTransport">$0.021</div>
+                            <div class="breakdown-percentage" id="breakdownTransportPct">8.6%</div>
+                        </div>
+                        
+                        <div class="breakdown-item">
+                            <div class="breakdown-name">
+                                <i class="fas fa-ship" style="color: #34495e;"></i>
+                                Export Freight
+                            </div>
+                            <div class="breakdown-value" id="breakdownFreight">$0.071</div>
+                            <div class="breakdown-percentage" id="breakdownFreightPct">29.1%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="breakdown-total">
+                        <div>TOTAL COST PER ROLL</div>
+                        <div id="breakdownTotal" style="color: #2ecc71; font-size: 1.5rem;">$0.244</div>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button class="btn btn-primary" onclick="calculateAllCosts()">
+                        <i class="fas fa-calculator"></i> Calculate All
+                    </button>
+                    <button class="btn btn-success" onclick="exportToExcel()">
+                        <i class="fas fa-file-excel"></i> Export to Excel
+                    </button>
+                    <button class="btn btn-warning" onclick="resetAll()">
+                        <i class="fas fa-redo"></i> Reset All
+                    </button>
+                </div>
+            </section>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Business Logic Compliant Calculator</strong> • No Currency Mismatch Risk • USD Used Consistently</p>
+            <p>All PKR inputs converted once using global exchange rate. No cost counted twice. Production calculated once and reused.</p>
+        </div>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Calculation completed successfully!</span>
+    </div>
+
+    <script>
+        // Global variables
+        let exchangeRate = 280.5;
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set exchange rate from input
+            exchangeRate = parseFloat(document.getElementById('exchangeRate').value);
+            
+            // Add event listeners to all inputs for auto-recalculation
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    // Recalculate when any input changes
+                    setTimeout(calculateAllCosts, 100);
+                });
+            });
+            
+            // Initial calculation
+            calculateAllCosts();
+        });
+        
+        // Toast notification function
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            toast.className = 'toast';
+            
+            if (type === 'error') {
+                toast.classList.add('error');
+            } else if (type === 'info') {
+                toast.classList.add('info');
+            }
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Convert PKR to USD
+        function pkrToUSD(pkrAmount) {
+            return pkrAmount / exchangeRate;
+        }
+        
+        // Main calculation function
+        function calculateAllCosts() {
+            try {
+                // Update global exchange rate
+                exchangeRate = parseFloat(document.getElementById('exchangeRate').value);
+                if (isNaN(exchangeRate) || exchangeRate <= 0) {
+                    exchangeRate = 280.5;
+                    document.getElementById('exchangeRate').value = exchangeRate;
+                }
+                
+                // SECTION 1: Product Specification
+                const ply = parseInt(document.getElementById('ply').value) || 2;
+                const gsmPerPly = parseFloat(document.getElementById('gsmPerPly').value) || 18;
+                const sheetsPerRoll = parseInt(document.getElementById('sheetsPerRoll').value) || 200;
+                const sheetWidth = parseFloat(document.getElementById('sheetWidth').value) || 10.5; // cm
+                const sheetLength = parseFloat(document.getElementById('sheetLength').value) || 11.5; // cm
+                
+                // Calculate total paper weight per roll (in grams)
+                const sheetArea = (sheetWidth / 100) * (sheetLength / 100); // m²
+                const totalPaperWeight = sheetArea * sheetsPerRoll * ply * gsmPerPly; // grams
+                
+                document.getElementById('totalPaperWeight').textContent = totalPaperWeight.toFixed(1) + ' g';
+                
+                // SECTION 2: Raw Material Costing
+                const jumboPrice = parseFloat(document.getElementById('jumboPrice').value) || 850; // USD/ton
+                const corePrice = parseFloat(document.getElementById('corePrice').value) || 550; // USD/ton
+                const coreWeight = parseFloat(document.getElementById('coreWeight').value) || 45; // grams
+                const wastePercentage = parseFloat(document.getElementById('wastePercentage').value) || 3.5; // %
+                
+                // Convert weights to tons
+                const paperWeightTon = (totalPaperWeight / 1000000) * (1 + wastePercentage/100);
+                const coreWeightTon = coreWeight / 1000000;
+                
+                // Calculate costs
+                const paperCost = paperWeightTon * jumboPrice;
+                const coreCost = coreWeightTon * corePrice;
+                const totalRawMaterialCost = paperCost + coreCost;
+                
+                document.getElementById('paperCostPerRoll').textContent = '$' + paperCost.toFixed(3);
+                document.getElementById('coreCostPerRoll').textContent = '$' + coreCost.toFixed(3);
+                document.getElementById('totalRawMaterialCost').textContent = '$' + totalRawMaterialCost.toFixed(3);
+                
+                // SECTION 3: Packaging
+                const innerWrapCostPKR = parseFloat(document.getElementById('innerWrapCost').value) || 5;
+                const bundlePackagingCostPKR = parseFloat(document.getElementById('bundlePackagingCost').value) || 30;
+                const rollsPerBundle = parseInt(document.getElementById('rollsPerBundle').value) || 6;
+                
+                // Convert PKR to USD
+                const innerWrapCostUSD = pkrToUSD(innerWrapCostPKR);
+                const bundlePackagingCostPerRollUSD = pkrToUSD(bundlePackagingCostPKR) / rollsPerBundle;
+                
+                const totalPackagingCost = innerWrapCostUSD + bundlePackagingCostPerRollUSD;
+                
+                document.getElementById('packagingCostPerRoll').textContent = '$' + totalPackagingCost.toFixed(3);
+                
+                // SECTION 4: Production & Electricity
+                const connectedLoad = parseFloat(document.getElementById('connectedLoad').value) || 150; // kW
+                const avgUsage = parseFloat(document.getElementById('avgUsage').value) || 65; // %
+                const electricityRatePKR = parseFloat(document.getElementById('electricityRate').value) || 22.5; // PKR/unit
+                const machineSpeed = parseFloat(document.getElementById('machineSpeed').value) || 2500; // rolls/hour
+                const hoursPerShift = parseFloat(document.getElementById('hoursPerShift').value) || 8;
+                const shiftsPerDay = parseInt(document.getElementById('shiftsPerDay').value) || 2;
+                const daysPerMonth = parseInt(document.getElementById('daysPerMonth').value) || 26;
+                
+                // Calculate monthly production
+                const hoursPerMonth = hoursPerShift * shiftsPerDay * daysPerMonth;
+                const monthlyProduction = machineSpeed * hoursPerMonth;
+                
+                // Calculate electricity consumption
+                const effectiveLoad = connectedLoad * (avgUsage / 100); // kW
+                const monthlyUnits = effectiveLoad * hoursPerMonth; // kWh
+                const electricityCostPKR = monthlyUnits * electricityRatePKR;
+                const electricityCostUSD = pkrToUSD(electricityCostPKR);
+                const electricityCostPerRoll = electricityCostUSD / monthlyProduction;
+                
+                document.getElementById('monthlyProduction').textContent = monthlyProduction.toLocaleString() + ' rolls';
+                document.getElementById('monthlyElectricityCost').textContent = '$' + electricityCostUSD.toFixed(0);
+                document.getElementById('electricityCostPerRoll').textContent = '$' + electricityCostPerRoll.toFixed(4);
+                
+                // SECTION 5: Overheads
+                const rentPKR = parseFloat(document.getElementById('rent').value) || 150000;
+                const laborPKR = parseFloat(document.getElementById('labor').value) || 750000;
+                const miscPKR = parseFloat(document.getElementById('misc').value) || 120000;
+                
+                const totalOverheadsPKR = rentPKR + laborPKR + miscPKR;
+                const totalOverheadsUSD = pkrToUSD(totalOverheadsPKR);
+                const overheadCostPerRoll = totalOverheadsUSD / monthlyProduction;
+                
+                document.getElementById('totalOverheadsUSD').textContent = '$' + totalOverheadsUSD.toFixed(0);
+                document.getElementById('overheadCostPerRoll').textContent = '$' + overheadCostPerRoll.toFixed(4);
+                
+                // SECTION 6: Local Transport & Handling
+                const localTransportPKR = parseFloat(document.getElementById('localTransport').value) || 15000;
+                const clearingChargesUSD = parseFloat(document.getElementById('clearingCharges').value) || 850;
+                const rollsPerContainer = parseInt(document.getElementById('rollsPerContainer').value) || 45000;
+                
+                const localTransportUSD = pkrToUSD(localTransportPKR);
+                const transportCostPerRoll = (localTransportUSD + clearingChargesUSD) / rollsPerContainer;
+                
+                document.getElementById('transportCostPerRoll').textContent = '$' + transportCostPerRoll.toFixed(3);
+                
+                // SECTION 7: Export Freight
+                const freightCostUSD = parseFloat(document.getElementById('freightCost').value) || 3200;
+                const freightRollsPerContainer = parseInt(document.getElementById('freightRollsPerContainer').value) || 45000;
+                
+                const freightCostPerRoll = freightCostUSD / freightRollsPerContainer;
+                
+                document.getElementById('freightCostPerRoll').textContent = '$' + freightCostPerRoll.toFixed(3);
+                
+                // SECTION 8: Final Cost Summary
+                const costPerRoll = totalRawMaterialCost + totalPackagingCost + electricityCostPerRoll + 
+                                  overheadCostPerRoll + transportCostPerRoll + freightCostPerRoll;
+                
+                const costPer100Rolls = costPerRoll * 100;
+                const costPer1000Rolls = costPerRoll * 1000;
+                
+                // Update final costs
+                document.getElementById('costPerRoll').textContent = '$' + costPerRoll.toFixed(3);
+                document.getElementById('costPer100Rolls').textContent = '$' + costPer100Rolls.toFixed(2);
+                document.getElementById('costPer1000Rolls').textContent = '$' + costPer1000Rolls.toFixed(2);
+                
+                // Update breakdown
+                document.getElementById('breakdownRawMaterials').textContent = '$' + totalRawMaterialCost.toFixed(3);
+                document.getElementById('breakdownPackaging').textContent = '$' + totalPackagingCost.toFixed(3);
+                document.getElementById('breakdownElectricity').textContent = '$' + electricityCostPerRoll.toFixed(4);
+                document.getElementById('breakdownOverheads').textContent = '$' + overheadCostPerRoll.toFixed(4);
+                document.getElementById('breakdownTransport').textContent = '$' + transportCostPerRoll.toFixed(3);
+                document.getElementById('breakdownFreight').textContent = '$' + freightCostPerRoll.toFixed(3);
+                document.getElementById('breakdownTotal').textContent = '$' + costPerRoll.toFixed(3);
+                
+                // Calculate percentages
+                const rawMaterialsPct = (totalRawMaterialCost / costPerRoll * 100).toFixed(1);
+                const packagingPct = (totalPackagingCost / costPerRoll * 100).toFixed(1);
+                const electricityPct = (electricityCostPerRoll / costPerRoll * 100).toFixed(1);
+                const overheadsPct = (overheadCostPerRoll / costPerRoll * 100).toFixed(1);
+                const transportPct = (transportCostPerRoll / costPerRoll * 100).toFixed(1);
+                const freightPct = (freightCostPerRoll / costPerRoll * 100).toFixed(1);
+                
+                document.getElementById('breakdownRawMaterialsPct').textContent = rawMaterialsPct + '%';
+                document.getElementById('breakdownPackagingPct').textContent = packagingPct + '%';
+                document.getElementById('breakdownElectricityPct').textContent = electricityPct + '%';
+                document.getElementById('breakdownOverheadsPct').textContent = overheadsPct + '%';
+                document.getElementById('breakdownTransportPct').textContent = transportPct + '%';
+                document.getElementById('breakdownFreightPct').textContent = freightPct + '%';
+                
+                showToast('All costs calculated successfully!');
+                
+            } catch (error) {
+                console.error('Calculation error:', error);
+                showToast('Error in calculation. Please check your inputs.', 'error');
+            }
+        }
+        
+        // Export to Excel function
+        function exportToExcel() {
+            // Get all values
+            const data = {
+                'Exchange Rate (PKR/USD)': exchangeRate,
+                'Ply': document.getElementById('ply').value,
+                'GSM per Ply': document.getElementById('gsmPerPly').value,
+                'Sheets per Roll': document.getElementById('sheetsPerRoll').value,
+                'Sheet Width (cm)': document.getElementById('sheetWidth').value,
+                'Sheet Length (cm)': document.getElementById('sheetLength').value,
+                'Jumbo Roll Price (USD/ton)': document.getElementById('jumboPrice').value,
+                'Core Paper Price (USD/ton)': document.getElementById('corePrice').value,
+                'Core Weight (g)': document.getElementById('coreWeight').value,
+                'Waste Percentage': document.getElementById('wastePercentage').value,
+                'Inner Wrap Cost (PKR)': document.getElementById('innerWrapCost').value,
+                'Bundle Packaging Cost (PKR)': document.getElementById('bundlePackagingCost').value,
+                'Rolls per Bundle': document.getElementById('rollsPerBundle').value,
+                'Connected Load (kW)': document.getElementById('connectedLoad').value,
+                'Average Usage (%)': document.getElementById('avgUsage').value,
+                'Electricity Rate (PKR/unit)': document.getElementById('electricityRate').value,
+                'Machine Speed (rolls/hour)': document.getElementById('machineSpeed').value,
+                'Hours per Shift': document.getElementById('hoursPerShift').value,
+                'Shifts per Day': document.getElementById('shiftsPerDay').value,
+                'Days per Month': document.getElementById('daysPerMonth').value,
+                'Rent (PKR/month)': document.getElementById('rent').value,
+                'Labor (PKR/month)': document.getElementById('labor').value,
+                'Misc (PKR/month)': document.getElementById('misc').value,
+                'Local Transport (PKR/container)': document.getElementById('localTransport').value,
+                'Clearing Charges (USD)': document.getElementById('clearingCharges').value,
+                'Rolls per Container': document.getElementById('rollsPerContainer').value,
+                'Freight Cost (USD/container)': document.getElementById('freightCost').value,
+                'Freight Rolls per Container': document.getElementById('freightRollsPerContainer').value,
+                'Cost per Roll (USD)': document.getElementById('costPerRoll').textContent,
+                'Cost per 100 Rolls (USD)': document.getElementById('costPer100Rolls').textContent,
+                'Cost per 1000 Rolls (USD)': document.getElementById('costPer1000Rolls').textContent
+            };
+            
+            // Create CSV content
+            let csvContent = "Parameter,Value\n";
+            for (const [key, value] of Object.entries(data)) {
+                csvContent += `${key},${value}\n`;
+            }
+            
+            // Add timestamp
+            const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
+            csvContent += `\nGenerated on,${timestamp}\n`;
+            csvContent += `Calculator Version,Business Logic Compliant v1.0\n`;
+            
+            // Create download link
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `toilet-roll-cost-analysis-${new Date().toISOString().slice(0,10)}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showToast('Data exported to CSV successfully!', 'info');
+        }
+        
+        // Reset all inputs
+        function resetAll() {
+            if (confirm('Are you sure you want to reset all values to defaults?')) {
+                // Global
+                document.getElementById('exchangeRate').value = 280.5;
+                
+                // Section 1
+                document.getElementById('ply').value = 2;
+                document.getElementById('gsmPerPly').value = 18;
+                document.getElementById('sheetsPerRoll').value = 200;
+                document.getElementById('sheetWidth').value = 10.5;
+                document.getElementById('sheetLength').value = 11.5;
+                
+                // Section 2
+                document.getElementById('jumboPrice').value = 850;
+                document.getElementById('corePrice').value = 550;
+                document.getElementById('coreWeight').value = 45;
+                document.getElementById('wastePercentage').value = 3.5;
+                
+                // Section 3
+                document.getElementById('innerWrapCost').value = 5;
+                document.getElementById('bundlePackagingCost').value = 30;
+                document.getElementById('rollsPerBundle').value = 6;
+                
+                // Section 4
+                document.getElementById('connectedLoad').value = 150;
+                document.getElementById('avgUsage').value = 65;
+                document.getElementById('electricityRate').value = 22.5;
+                document.getElementById('machineSpeed').value = 2500;
+                document.getElementById('hoursPerShift').value = 8;
+                document.getElementById('shiftsPerDay').value = 2;
+                document.getElementById('daysPerMonth').value = 26;
+                
+                // Section 5
+                document.getElementById('rent').value = 150000;
+                document.getElementById('labor').value = 750000;
+                document.getElementById('misc').value = 120000;
+                
+                // Section 6
+                document.getElementById('localTransport').value = 15000;
+                document.getElementById('clearingCharges').value = 850;
+                document.getElementById('rollsPerContainer').value = 45000;
+                
+                // Section 7
+                document.getElementById('freightCost').value = 3200;
+                document.getElementById('freightRollsPerContainer').value = 45000;
+                
+                // Recalculate
+                calculateAllCosts();
+                
+                showToast('All values reset to defaults', 'info');
+            }
+        }
+    </script>
+</body>
+</html>
